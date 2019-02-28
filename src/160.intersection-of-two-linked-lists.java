@@ -93,27 +93,19 @@
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         
-        ListNode newList = headA;
-        ListNode temp = newList;
-        ListNode tailA;
 
-        while(temp.next != null) {
-            temp = temp.next;
+        ListNode slow = headA, fast = headA, tailA = headA;
+
+        while(tailA.next != null) {
+            tailA = tailA.next;
         }
-        tailA = temp;
-        temp.next = headB;
-
-        ListNode slow = headA, fast = headA;
         while(slow.next != null && fast.next != null) {
-            if(slow == fast) {
-                tailA = null;
-                return slow;
-            }
-            slow = slow.next;
-            if(fast.next == null || fast.next.next == null) return null;
+            if(slow == fast) return slow;
+            slow = slow == tailA ? headB : slow.next;
+            fast = (fast == tailA || fast.next == tailA)  ? headB : fast.next.next;
             fast = fast.next.next;
         }
-        tailA = null;
+        if(slow == fast) return slow;
         return null;
     }
 }
